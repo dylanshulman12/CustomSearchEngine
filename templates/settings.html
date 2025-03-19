@@ -1,0 +1,125 @@
+{% extends "index.html" %}
+
+{% block title %} Settings {% endblock %}
+
+{% block content %} 
+<header class="d-flex w-100 position-relative p-2">
+    <a href="/" class="btn btn-primary fs-4">Back</a>
+    <h1 class="position-absolute top-50 start-50 translate-middle m-0">Settings</h1>
+</header>
+
+<div class="d-flex row">
+
+    <div class="col-2 p-4 text-start border">
+        <div><a class="settings-index" href="/settings">General</a></div>
+        <div><a class="settings-index mt-4" href="/settings/search">Search</a></div>
+        <div><a class="settings-index mt-4" href="/settings/AI-Settings">AI Settings</a></div>
+
+
+    </div>
+
+    <!-- This puts in exact middle -->
+    <!-- <div class="col-10 p-4 position-absolute top-50 start-50 translate-middle border"> -->
+    <div class="col-10 p-4">
+        <div class="text-start ps-4" > 
+            <p>Settings....</p>
+            
+            <!-- Logo Settings -->
+            <div class="">
+                <h2>Custom Logo Settings</h2>
+                
+
+                <div class="p-4">
+
+                    <div class="row">
+                        <div class="col-auto">
+                            <form action="/preview" method="POST" id=preview enctype="multipart/form-data">
+                                <input type="file" name="file" required onchange="document.getElementById('preview').submit();">
+                            </form>
+                        </div>
+                        <div class="col-auto">
+                            <form action="/upload" method="POST">
+                                <input type="hidden" name="upload" value="{{ preview }}">
+                                <input type="submit" value="Select Image">
+                            </form>
+                        </div>
+                        <div class="col-auto mb-2">
+                            <form action="/resetIcon" method="POST">
+                                <!-- <input type="hidden" name="upload" value="{{ preview }}"> -->
+                                <input type="submit" value="Reset Icon">
+                            </form>
+                        </div>
+
+
+                        
+                        <div>Available Logos:</div>
+                        {% for logo in available_logos%}
+                        <div class="container p-2">
+                        <div class="container ">
+                        <div class="row mt-1 justify-content-center align-items-center" style="border: 1px solid black; border-radius: 1px; width:35%;">
+
+                            <div class="col mb-1">
+                                <p class="m-0">{{ logo }}</p>
+                            </div>
+                            
+                            <div class="col-auto mt-1 me-2 p-1">
+                                <form action="/selectAvailableLogo" method="POST">
+                                    <input type="hidden" name="selected_logo" value="{{ logo }}"> 
+                                    <button type="submit" class="btn btn-primary">Select</button>
+                                </form>
+                            </div>
+
+                            <div class="col-auto mt-1 ms-2" >
+                                <form action="/deleteAvailableLogo" method="POST">
+                                    <input type="hidden" name="selected_logo" value="{{ logo }}"> 
+                                    <button type="submit">Delete Logo</button>
+                                </form>
+                            </div>
+                         
+                        </div>
+                        </div>
+                        </div>
+                        {% endfor %}
+
+                    </div>
+ 
+                    <div class="mt-4"><h3>Logo Preview:</h3></div>
+                    <div class="ps-2 pt-2 pb-5 border">
+                        {% if preview %}
+                            <img class="img-rounded w-50" src="{{ url_for('static', filename='tmp/' + preview) }}" alt="Uploaded Image">
+                        {% else %}
+                            <p>.</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+
+            <form action="/set_color" method="POST">
+                <label for="colorPicker">Choose a background color:</label>
+                <input type="color" id="colorPicker" name="colorPicker" value="#3498db">
+                
+                <div class="p-4">
+                        <button type="submit" name="color_Select_Button" value="select">Submit</button>
+                        
+                        <input type="hidden" id="resetBg" name="resetBg" value="reset"> 
+                        <button type="submit" name="color_Select_Button" value="reset">Reset Bg</button>
+                </div>
+
+            </form>
+                
+
+
+
+
+        </div>
+       
+    </div>
+
+    
+</div>
+
+
+
+{% endblock %}
+
